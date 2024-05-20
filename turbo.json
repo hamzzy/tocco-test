@@ -4,7 +4,6 @@
       "lint": {},
       "dev": {
         "cache": false
-      },
-      "server#format": {}
+      }
     }
   }
