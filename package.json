@@ -22,9 +22,20 @@
   },
   "scripts": {
     "dev": "turbo run dev",
-    "prepare": "husky",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "postinstall": "husky install"
+    "lint": "yarn turbo server#lint && yarn turbo client#lint",
+    "format": "yarn turbo client#format && yarn turbo server#format",
+    "prepare": "husky install",
+    "migration:create": "npx prisma migrate --dev",
+    "migrate": "npx prisma migrate deploy"
+  },
+  "dependencies": {
+    "@nestjs/config": "^3.2.2",
+    "@nestjs/swagger": "^7.3.1",
+    "@prisma/client": "^5.14.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv-cli": "^7.4.2",
+    "lint-staged": "^15.2.2",
+    "prisma": "^5.14.0"
   }
 }
