@@ -11,6 +11,9 @@
       },
       "server#db-push": {
         "cache": false
+      },
+      "server#migrate": {
+        "cache": false
       }
     }
   }

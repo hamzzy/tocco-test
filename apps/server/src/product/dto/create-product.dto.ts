@@ -1,55 +1,4 @@
-// src/product/dto/create-product.dto.ts
-import {
-  IsString,
-  IsArray,
-  ValidateNested,
-  IsOptional,
-  IsNumber,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-
-class CreateImpactDto {
-  @IsNumber()
-  carbonFootprint: number;
-
-  @IsNumber()
-  reductionTargets: number;
-
-  @IsNumber()
-  reductionAchievements: number;
-
-  @IsNumber()
-  waterConsumption: number;
-
-  @IsNumber()
-  waterRecycled: number;
-
-  @IsNumber()
-  bioBasedContent: number;
-
-  @IsOptional()
-  @IsNumber()
-  initialWaste?: number;
-
-  @IsOptional()
-  @IsNumber()
-  finalWaste?: number;
-}
-
-class CreateCertificateDto {
-  @IsString()
-  filePath: string;
-}
-
-class CreateAttachmentDto {
-  @IsString()
-  filePath: string;
-}
-
-class CreateImpactFactDto {
-  @IsString()
-  description: string;
-}
+import { IsArray, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -58,23 +7,92 @@ export class CreateProductDto {
   @IsString()
   description: string;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateImpactDto)
-  impactData: CreateImpactDto[];
+  @IsDateString()
+  launchDate: string;
 
+  @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateCertificateDto)
-  certificates: CreateCertificateDto[];
+  impactData?: CreateProductImpactDataDto[];
 
+  @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateAttachmentDto)
-  attachments: CreateAttachmentDto[];
+  certificates?: CreateCertificateDto[];
 
+  @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateImpactFactDto)
-  impactFacts: CreateImpactFactDto[];
+  attachments?: CreateAttachmentDto[];
+}
+
+export class CreateProductImpactDataDto {
+  @IsNumber()
+  totalCarbonFootprint: number;
+
+  @IsNumber()
+  reductionTargetCarbon: number;
+
+  @IsNumber()
+  reductionAchievementCarbon: number;
+
+  @IsNumber()
+  bioBasedContent: number;
+
+  @IsNumber()
+  wasteReduction: number;
+
+  @IsNumber()
+  totalWaterConsumption: number;
+
+  @IsNumber()
+  waterRecycled: number;
+
+  @IsNumber()
+  reductionAchievementWater: number;
+
+  @IsNumber()
+  mechanicalRecyclability: number;
+
+  @IsNumber()
+  chemicalRecyclability: number;
+
+  @IsNumber()
+  naturalRecyclability: number;
+}
+
+export class CreateCertificateDto {
+  @IsString()
+  certificateId: string;
+}
+
+export class CreateAttachmentDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  attachmentId: string;
+}
+
+export class UpdateProductDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsDateString()
+  launchDate?: string;
+
+  @IsOptional()
+  @IsArray()
+  impactData?: CreateProductImpactDataDto[];
+
+  @IsOptional()
+  @IsArray()
+  certificates?: CreateCertificateDto[];
+
+  @IsOptional()
+  @IsArray()
+  attachments?: CreateAttachmentDto[];
 }

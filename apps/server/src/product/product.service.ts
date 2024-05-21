@@ -3,8 +3,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
 import { PrismaService } from '../common/prisma/prisma.service';
 
 @Injectable()
@@ -18,34 +17,47 @@ export class ProductService {
         const {
           name,
           description,
+          launchDate,
           impactData,
           certificates,
           attachments,
-          impactFacts,
         } = createProductDto;
 
         const product = await prisma.product.create({
-          data: { name, description },
+          data: { name, description, launchDate },
         });
 
         const productId = product.id;
 
-        await Promise.all([
-          ...impactData.map((impact) =>
-            prisma.impact.create({ data: { ...impact, productId } }),
-          ),
-          ...certificates.map((certificate) =>
-            prisma.certificates.create({ data: { ...certificate, productId } }),
-          ),
-          ...attachments.map((attachment) =>
-            prisma.impactAttachments.create({
-              data: { ...attachment, productId },
-            }),
-          ),
-          ...impactFacts.map((fact) =>
-            prisma.impactFacts.create({ data: { ...fact, productId } }),
-          ),
-        ]);
+        if (impactData) {
+          await Promise.all(
+            impactData.map((impact) =>
+              prisma.productImpactData.create({
+                data: { ...impact, productId },
+              }),
+            ),
+          );
+        }
+
+        if (certificates) {
+          await Promise.all(
+            certificates.map((certificate) =>
+              prisma.certificate.create({
+                data: { ...certificate, productId },
+              }),
+            ),
+          );
+        }
+
+        if (attachments) {
+          await Promise.all(
+            attachments.map((attachment) =>
+              prisma.attachment.create({
+                data: { ...attachment, productId },
+              }),
+            ),
+          );
+        }
 
         return product;
       });
@@ -61,7 +73,6 @@ export class ProductService {
           impactData: true,
           certificates: true,
           attachments: true,
-          impactFacts: true,
         },
       });
     } catch (error) {
@@ -76,7 +87,6 @@ export class ProductService {
         impactData: true,
         certificates: true,
         attachments: true,
-        impactFacts: true,
       },
     });
 
@@ -93,40 +103,51 @@ export class ProductService {
         const {
           name,
           description,
+          launchDate,
           impactData,
           certificates,
           attachments,
-          impactFacts,
         } = updateProductDto;
 
         const product = await prisma.product.update({
           where: { id },
-          data: { name, description },
+          data: { name, description, launchDate },
         });
 
-        await prisma.impact.deleteMany({ where: { productId: id } });
-        await prisma.certificates.deleteMany({ where: { productId: id } });
-        await prisma.impactAttachments.deleteMany({ where: { productId: id } });
-        await prisma.impactFacts.deleteMany({ where: { productId: id } });
+        if (impactData) {
+          await prisma.productImpactData.deleteMany({
+            where: { productId: id },
+          });
+          await Promise.all(
+            impactData.map((impact) =>
+              prisma.productImpactData.create({
+                data: { ...impact, productId: id },
+              }),
+            ),
+          );
+        }
 
-        await Promise.all([
-          ...impactData.map((impact) =>
-            prisma.impact.create({ data: { ...impact, productId: id } }),
-          ),
-          ...certificates.map((certificate) =>
-            prisma.certificates.create({
-              data: { ...certificate, productId: id },
-            }),
-          ),
-          ...attachments.map((attachment) =>
-            prisma.impactAttachments.create({
-              data: { ...attachment, productId: id },
-            }),
-          ),
-          ...impactFacts.map((fact) =>
-            prisma.impactFacts.create({ data: { ...fact, productId: id } }),
-          ),
-        ]);
+        if (certificates) {
+          await prisma.certificate.deleteMany({ where: { productId: id } });
+          await Promise.all(
+            certificates.map((certificate) =>
+              prisma.certificate.create({
+                data: { ...certificate, productId: id },
+              }),
+            ),
+          );
+        }
+
+        if (attachments) {
+          await prisma.attachment.deleteMany({ where: { productId: id } });
+          await Promise.all(
+            attachments.map((attachment) =>
+              prisma.attachment.create({
+                data: { ...attachment, productId: id },
+              }),
+            ),
+          );
+        }
 
         return product;
       });
@@ -138,10 +159,9 @@ export class ProductService {
   async remove(id: number) {
     try {
       return await this.prisma.$transaction(async (prisma) => {
-        await prisma.impact.deleteMany({ where: { productId: id } });
-        await prisma.certificates.deleteMany({ where: { productId: id } });
-        await prisma.impactAttachments.deleteMany({ where: { productId: id } });
-        await prisma.impactFacts.deleteMany({ where: { productId: id } });
+        await prisma.productImpactData.deleteMany({ where: { productId: id } });
+        await prisma.certificate.deleteMany({ where: { productId: id } });
+        await prisma.attachment.deleteMany({ where: { productId: id } });
 
         return await prisma.product.delete({ where: { id } });
       });
