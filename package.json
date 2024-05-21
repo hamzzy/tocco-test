@@ -22,8 +22,8 @@
   },
   "scripts": {
     "dev": "turbo run dev",
-    "lint": "yarn turbo server#lint && yarn turbo client#lint",
-    "format": "yarn turbo client#format && yarn turbo server#format",
+    "lint": "turbo run lint",
+    "format": "turbo run server#format",
     "prepare": "husky install",
     "migration:create": "npx prisma migrate --dev",
     "migrate": "npx prisma migrate deploy"

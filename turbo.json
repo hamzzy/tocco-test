@@ -1,8 +1,8 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "pipeline": {
-      "server#lint": {},
-      "client#lint": {},
+      "lint": {},
+      "server#format": {},
       "dev": {
         "cache": false
       },
