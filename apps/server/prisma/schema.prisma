@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// schema.prisma
+
+model Product {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String
+  impactData  Impact[]
+  certificates Certificates[]
+  attachments ImpactAttachments[]
+  impactFacts ImpactFacts[]
+}
+
+model Impact {
+  id                  Int     @id @default(autoincrement())
+  product             Product @relation(fields: [productId], references: [id])
+  productId           Int
+  carbonFootprint     Float
+  reductionTargets    Float
+  reductionAchievements Float
+  waterConsumption    Float
+  waterRecycled       Float
+  bioBasedContent     Float
+  initialWaste        Float?
+  finalWaste          Float?
+}
+
+model Certificates {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  filePath  String
+}
+
+model ImpactAttachments {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  filePath  String
+}
+
+model ImpactFacts {
+  id          Int     @id @default(autoincrement())
+  product     Product @relation(fields: [productId], references: [id])
+  productId   Int
+  description String
+}
