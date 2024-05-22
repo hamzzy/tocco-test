@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "turbo run server#format",
+    "format": "turbo run format",
     "prepare": "husky install",
     "migrate": "turbo run server#migrate"
   },
@@ -53,6 +53,8 @@
     "framer-motion": "^11.2.4",
     "lint-staged": "^15.2.2",
     "prisma": "^5.14.0",
+    "react-hot-toast": "^2.4.1",
+    "uuid": "^9.0.1",
     "yarn": "^1.22.22",
     "yup": "^1.4.0"
   }

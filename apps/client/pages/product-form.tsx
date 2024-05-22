@@ -3,53 +3,17 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import React, { useEffect } from 'react';
-import { useFormik } from 'formik';
+import { useFormik} from 'formik';
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useUppy from "@/hooks/useUppy";
 import UppyDashboard from "@/components/upload";
+import { toast } from 'react-hot-toast';
+import { FormValues } from "@/utils/type";
+import { submitForm } from "@/utils/api";
 
 
 
-// TotalCarbonFootprint tracked, 
-// ReductionTargetCarbon tracked, 
-// ReductionAchievementCarbon compute, 
-// BioBased Content tracked, 
-// WasteReduction t, 
-// TotalWaterConsumption t, 
-// WaterRecycled t, 
-// ReductionAchievementWater computed, 
-// MechanicalRecyclability, 
-// ChemicalRecyclability, 
-// NaturalRecyclability
-interface ImpactData {
-    totalCarbonFootprint: number;
-    reductionTargetCarbon: number;
-    waterConsumption: number;
-    waterRecycled: number;
-    bioBasedContent: number;
-    wastedReduction: number;
-    mechanicalRecyclability: number;
-    chemicalRecyclability: number;
-    naturalRecyclability: number;
-  }
-  
-  interface Certificate {
-    certificateId: string;
-  }
-  
-  interface Attachment {
-    name: string;
-    attachmentId : string;
-  }
-  
-  interface FormValues {
-    title: string;
-    description: string;
-    impactData: ImpactData[];
-    certificates: Certificate[];
-    attachments: Attachment[];
-  }
   
   const validationSchema = Yup.object({
     title: Yup.string().required('Required'),
@@ -67,18 +31,6 @@ interface ImpactData {
         naturalRecyclability: Yup.number().required('Required'),
       })
     ),
-    // certificates: Yup.array().of(
-    //   Yup.object({
-    //     name: Yup.string().required('Required'),
-    //     filePath: Yup.string().required('Required'),
-    //   })
-    // ),
-    // attachments: Yup.array().of(
-    //   Yup.object({
-    //     name: Yup.string().required('Required'),
-    //     filePath: Yup.string().required('Required'),
-    //   })
-    // )
   });
   
   const initialValues: FormValues = {
@@ -97,25 +49,33 @@ interface ImpactData {
         naturalRecyclability: 0,
       },
     ],
-    certificates: [{ certificateId : '' }],
-    attachments: [{ name: '', attachmentId: '' }],
-  };
+ };
 const CatalogForm: React.FC = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<unknown, Error, FormValues>({mutationFn: submitForm,
+    onSuccess: () => {
+      toast.success('Form submitted successfully!');
+      queryClient.invalidateQueries('catalog');
+    },
+    onError: (error) => {
+      console.log(error.message)
+      toast.error(error.message);
+    },
+  });
+
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: function (values){
+      mutation.mutate(values);
       console.log(values);
     },
   });
 
 
-//   useEffect(() => {
-//     if (uploadedFiles.length > 0) {
-//       formik.setFieldValue('attachments', uploadedFiles.map(filePath => ({ name: filePath, filePath })));
-//     }
-//   }, [uploadedFiles, formik]);
+
 
   return (
     <div className="flex justify-center items-center  bg-gray-100">
@@ -384,7 +344,7 @@ const CatalogForm: React.FC = () => {
                   <div className="text-center">
                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                       <div>
-                      <UppyDashboard id="unique-id-1" name="certificate" setFileField={formik.setFieldValue}/>
+                      <UppyDashboard id="unique-id-1" name="certificates" setField={formik}/>
                     </div>
                   </div>
                   <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
@@ -406,7 +366,7 @@ const CatalogForm: React.FC = () => {
                 <div className="text-center">
                   <div className="mt-4 flex text-sm leading-6 text-gray-600">
                     
-                  <UppyDashboard id="unique-id-2" name="attachment"setFileField={formik.setFieldValue}/>
+                  <UppyDashboard id="unique-id-2" name="attachments" setField={formik}/>
                  
                   </div>
                   <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>

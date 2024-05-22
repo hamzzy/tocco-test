@@ -1,38 +1,32 @@
-// types.ts
-export interface ImpactData {
-    id: number;
-    productId: number;
-    totalCarbonFootprint: number;
-    reductionTargetCarbon: number;
-    reductionAchievementCarbon: number;
-    bioBasedContent: number;
-    wasteReduction: number;
-    totalWaterConsumption: number;
-    waterRecycled: number;
-    reductionAchievementWater: number;
-    mechanicalRecyclability: number;
-    chemicalRecyclability: number;
-    naturalRecyclability: number;
-    createdAt: string;
-    updatedAt: string;
-  }
-  
-  export interface Certificate {
-    id: number;
-    productId: number;
-    certificateId: string;
-    createdAt: string;
-    updatedAt: string;
-  }
-  
-  export interface Attachment {
-    id: number;
-    productId: number;
-    name: string;
-    attachmentId: string;
-    createdAt: string;
-    updatedAt: string;
-  }
+interface ImpactData {
+  totalCarbonFootprint: number;
+  reductionTargetCarbon: number;
+  waterConsumption: number;
+  waterRecycled: number;
+  bioBasedContent: number;
+  wastedReduction: number;
+  mechanicalRecyclability: number;
+  chemicalRecyclability: number;
+  naturalRecyclability: number;
+}
+
+interface Certificate {
+  certificateId: string;
+}
+
+interface Attachment {
+  name: string;
+  attachmentId : string;
+}
+
+export interface FormValues {
+  title: string;
+  description: string;
+  impactData: ImpactData[];
+  certificates: Certificate[];
+  attachments: Attachment[];
+}
+
   
   export interface Product {
     id: number;

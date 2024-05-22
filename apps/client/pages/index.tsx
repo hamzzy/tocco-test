@@ -6,20 +6,8 @@ import NavBar from "@/components/layouts/header";
 import { useQuery } from '@tanstack/react-query';
 import { Product } from '@/utils/type';
 import ProductCard from "@/components/product/productCard";
-// const products = [
 
 
-//   {
-//     id: 1,
-//     name: 'Basic Tee',
-//     href: '#',
-//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     color: 'Black',
-//   }
-// ]
-// lib/fetchProducts.ts
 export const fetchProducts = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
   if (!res.ok) {
@@ -29,7 +17,7 @@ export const fetchProducts = async () => {
 };
 
 
-export default function Home() {
+const  Home: React.FC = () =>{
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ['products'],
     queryFn: fetchProducts,
@@ -69,3 +57,4 @@ export default function Home() {
     </>
   )
 }
+export default Home;

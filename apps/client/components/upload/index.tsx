@@ -3,15 +3,27 @@ import { Dashboard } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import React from 'react';
-import { SelectField } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { FormikProps } from 'formik';
+interface UppyDashboardProps {
+  id: string;
+  name: string;
+  setField: FormikProps<any>['setFieldValue'];
+}
 
-const UppyDashboard: React.FC<{ id: string, name: string, setFileField: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ id }) => {
+const UppyDashboard: React.FC<UppyDashboardProps> = ({ id, name, setField }) => {
+
   const { uppy, uploadedFiles } = useUppy(id); // Call the useUppy hook with the provided ID
-  // useEffect(() => {
-  //       if (uploadedFiles.length > 0) {
-  //        setFileField('attachments', uploadedFiles);
-  //       }
-  //     }, [uploadedFiles, setFileField]);
+  useEffect(() => {
+    if (uploadedFiles.length > 0) {
+      const fieldData = uploadedFiles.map((filePath) =>
+        name === "attachments"
+          ? { name: filePath, attachmentId: filePath }
+          : { certificateId: filePath }
+      );
+      setField.setFieldValue(name, fieldData, true);
+    }
+  }, [uploadedFiles, name]);
   return (
     <>
       {uppy && <Dashboard uppy={uppy} id={`uppy-dashboard-${id}`} height={200} />}
