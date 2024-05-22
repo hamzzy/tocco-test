@@ -30,8 +30,16 @@ export class ProductService {
         const productId = product.id;
 
         if (impactData) {
+          const impactDataWithComputedFields = impactData.map((impact) => ({
+            ...impact,
+            reductionAchievementCarbon:
+              impact.reductionTargetCarbon - impact.totalCarbonFootprint,
+            reductionAchievementWater:
+              impact.waterRecycled - impact.totalWaterConsumption, // Assuming a target water consumption of 500
+          }));
+
           await Promise.all(
-            impactData.map((impact) =>
+            impactDataWithComputedFields.map((impact) =>
               prisma.productImpactData.create({
                 data: { ...impact, productId },
               }),

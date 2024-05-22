@@ -5,7 +5,7 @@ import styles from "@/styles/Home.module.css";
 import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useUppy from "@/hooks/useUppy";
 import UppyDashboard from "@/components/upload";
 
@@ -35,12 +35,12 @@ interface ImpactData {
   }
   
   interface Certificate {
-    filePath: string;
+    certificateId: string;
   }
   
   interface Attachment {
     name: string;
-    filePath: string;
+    attachmentId : string;
   }
   
   interface FormValues {
@@ -97,8 +97,8 @@ interface ImpactData {
         naturalRecyclability: 0,
       },
     ],
-    certificates: [{ name: '', filePath: '' }],
-    attachments: [{ name: '', filePath: '' }],
+    certificates: [{ certificateId : '' }],
+    attachments: [{ name: '', attachmentId: '' }],
   };
 const CatalogForm: React.FC = () => {
 

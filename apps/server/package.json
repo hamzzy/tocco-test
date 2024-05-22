@@ -20,17 +20,18 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
-    "migrate":"prisma migrate dev"
+    "migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
+    "@tanstack/react-query": "^5.37.1",
+    "database": "*",
     "husky": "^9.0.11",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0",
-    "database": "*"
+    "rxjs": "^7.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -54,7 +55,6 @@
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.2.0",
     "typescript": "^5.0.0"
-    
   },
   "jest": {
     "moduleFileExtensions": [
