@@ -1,50 +1,7 @@
 import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, MinLength } from 'class-validator';
+import { CreateProductImpactDataDto } from './create-product-impact.dto';
+import { CreateAttachmentDto } from './create-product-attachment.dto';
 
-export class CreateProductImpactDataDto {
-  @IsNumber()
-  @IsNotEmpty()
-  totalCarbonFootprint: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  reductionTargetCarbon: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  reductionAchievementCarbon: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  bioBasedContent: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  wasteReduction: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  totalWaterConsumption: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  waterRecycled: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  reductionAchievementWater: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  mechanicalRecyclability: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  chemicalRecyclability: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  naturalRecyclability: number;
-}
 
 export class CreateProductDto {
   @IsString()
@@ -81,37 +38,4 @@ export class CreateProductDto {
   attachments?: CreateAttachmentDto[];
 }
 
-export class CreateAttachmentDto {
-  @IsString()
-  name : string;
 
-  @IsString()
-  attachmentId: string;
-}
-
-export class UpdateProductDto {
-  @IsOptional()
-  @IsString()
-  title ?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsString()
-  image?: string;
-
-  @IsOptional()
-  impactData?: CreateProductImpactDataDto;
-
-  @IsOptional()
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  certificates?: string[];
-
-  @IsOptional()
-  @IsArray()
-  attachments?: CreateAttachmentDto[];
-}

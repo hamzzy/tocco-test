@@ -2,7 +2,7 @@ import { FormValues, Product } from "./type";
 
 export const submitForm = async (productData: FormValues) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export const submitForm = async (productData: FormValues) => {
 
 
 export const fetchProducts = async () :Promise<Product> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
   if (!res.ok) {
     throw new Error('Failed to fetch products');
   }
@@ -31,7 +31,7 @@ export const fetchProducts = async () :Promise<Product> => {
 
 
 export const fetchProduct = async (productId: number): Promise<Product> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`);
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.message || 'Failed to fetch product');

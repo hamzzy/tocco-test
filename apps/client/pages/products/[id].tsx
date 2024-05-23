@@ -29,7 +29,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   });
 
   if (isLoading) {
-    return <div className="skeleton w-32 h-32"></div>
+    return (
+      <div className="bg-white">
+        <div className="pt-6">
+          <div className="skeleton w-32 h-32 mx-auto"></div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

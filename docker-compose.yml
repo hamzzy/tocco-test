@@ -1,6 +1,20 @@
 version: '3.8'
 services:
-   db:
+  tocco-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    command: "make migrate-dev"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
     container_name: postgres-db
     image: postgres:latest
     volumes:
@@ -14,7 +28,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
 volumes:
   db:
 

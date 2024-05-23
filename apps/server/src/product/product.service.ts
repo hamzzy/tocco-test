@@ -3,8 +3,10 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateProductDto, CreateProductImpactDataDto, UpdateProductDto } from './dto/create-product.dto';
+import { CreateProductDto} from './dto/create-product.dto';
 import { PrismaService } from '../common/prisma/prisma.service';
+import { CreateProductImpactDataDto } from './dto/create-product-impact.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -17,7 +19,6 @@ export class ProductService {
       return await this.prisma.$transaction(async (prisma) => {
         const { title, description, image, impactData, certificates, attachments } = createProductDto;
   
-        console.log('Received data:', createProductDto);  // Log the received data
   
         const product = await prisma.product.create({
           data: {
@@ -56,7 +57,7 @@ export class ProductService {
   }
   
 
-
+// get all products
   async findAll() {
     try {
       return await this.prisma.product.findMany({
@@ -70,6 +71,7 @@ export class ProductService {
     }
   }
 
+  // find one product
   async findOne(id: number) {
     const product = await this.prisma.product.findUnique({
       where: { id },
