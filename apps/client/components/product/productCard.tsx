@@ -13,14 +13,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="group relative">
         <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-50">
           <img
-            src={product.imageSrc || 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg'}
-            alt={product.name}
-            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+            src={process.env.NEXT_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/tocco-aasset/" + product.image}
+            alt={product.title}
+            className="h-100 w-full object-cover object-center lg:h-400 lg:w-full"
           />
         </div>
         <div className="mt-4 flex justify-between">
           <div>
-            <h3 className="text-sm text-gray-700">{product.name}</h3>
+            <h2 className="text-md font-bold tracking-tight text-gray-700">{product.title}</h2>
           </div>
         </div>
       </div>

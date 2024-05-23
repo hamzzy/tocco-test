@@ -1,17 +1,35 @@
-interface ImpactData {
+import Image from 'next/image';
+interface CreateImpactData {
   totalCarbonFootprint: number;
   reductionTargetCarbon: number;
-  waterConsumption: number;
+  totalWaterConsumption: number;
   waterRecycled: number;
   bioBasedContent: number;
-  wastedReduction: number;
+  wasteReduction: number;
   mechanicalRecyclability: number;
   chemicalRecyclability: number;
   naturalRecyclability: number;
+ 
+}
+
+
+interface ImpactData {
+  totalCarbonFootprint: number;
+  reductionTargetCarbon: number;
+  totalWaterConsumption: number;
+  waterRecycled: number;
+  bioBasedContent: number;
+  wasteReduction: number;
+  mechanicalRecyclability: number;
+  chemicalRecyclability: number;
+  naturalRecyclability: number;
+  reductionAchievementCarbon: number | null;
+  reductionAchievementWater : number | null;
+  
 }
 
 interface Certificate {
-  certificateId: string;
+  name: string;
 }
 
 interface Attachment {
@@ -21,18 +39,19 @@ interface Attachment {
 
 export interface FormValues {
   title: string;
+  image : string;
   description: string;
-  impactData: ImpactData[];
+  impactData: CreateImpactData;
   certificates: Certificate[];
   attachments: Attachment[];
 }
 
   
   export interface Product {
-    id: number;
-    name: string;
+    id : number;
+    title: string;
+    image: string;
     description: string;
-    launchDate: string;
     createdAt: string;
     updatedAt: string;
     impactData: ImpactData;

@@ -19,7 +19,7 @@ const UppyDashboard: React.FC<UppyDashboardProps> = ({ id, name, setField }) => 
       const fieldData = uploadedFiles.map((filePath) =>
         name === "attachments"
           ? { name: filePath, attachmentId: filePath }
-          : { certificateId: filePath }
+          : filePath
       );
       setField.setFieldValue(name, fieldData, true);
     }

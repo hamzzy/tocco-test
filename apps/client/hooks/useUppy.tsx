@@ -13,7 +13,7 @@ const useUppy = (id: string) => {
       id: `uppy-dashboard-${id}`,
       restrictions: {
         maxFileSize: 100000000,
-        allowedFileTypes: ['images/*', '.jpeg', '.jpg', '.png',".pdf",".txt",".docx"],
+        allowedFileTypes: ['images/*', '.jpeg', '.jpg',".webp", '.png',".pdf",".txt",".docx"],
       },
     })
       .use(Tus, {
@@ -33,8 +33,8 @@ const useUppy = (id: string) => {
           contentType: file.type,
         };
       }).on('complete', (result) => {
-
-        setUploadedFiles((prevFiles) => [...prevFiles, result.successful[0].data.name]);
+        console.log(result.successful[0])
+        setUploadedFiles((prevFiles) => [...prevFiles, result.successful[0].meta.objectName]);
 
             
         });

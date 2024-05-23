@@ -2,15 +2,10 @@
 import { GetServerSideProps } from 'next';
 import { useQuery } from '@tanstack/react-query';
 import { Product } from '@/utils/type';
+import { getUrlByName } from '@/utils';
+import { Tabs } from 'daisyui';
+import { ImageAssetURL } from '@/utils/constat';
 
-const features = [
-  { name: 'Origin', description: 'Designed by Good Goods, Inc.' },
-  { name: 'Material', description: 'Solid walnut base with rare earth magnets and powder coated steel card cover' },
-  { name: 'Dimensions', description: '6.25" x 3.55" x 1.15"' },
-  { name: 'Finish', description: 'Hand sanded and finished with natural oil' },
-  { name: 'Includes', description: 'Wood card tray and 3 refill packs' },
-  { name: 'Considerations', description: 'Made from natural materials. Grain and color vary with each item.' },
-];
 
 export const fetchProduct = async (productId: number): Promise<Product> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`);
@@ -41,7 +36,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="skeleton w-32 h-32"></div>
   }
 
   if (error) {
@@ -49,152 +44,131 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   }
 
   return (
+
+
     <div className="bg-white">
-      <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{product?.name}</h2>
-          <p className="mt-4 text-gray-500">{product?.description}</p>
+      <div className="pt-6">
+        <h1 className="text-2xl font-bold tracking-tight text-center text-gray-900 sm:text-4xl">{product?.title}</h1>
 
-          <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
-          <div  className="border-t border-gray-200 pt-3">
-                <dt className="font-medium text-gray-900">TotalCarbonFootprint</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.totalCarbonFootprint}%</dd>
+        <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24 lg:pt-16">
+          <div className="lg:grid lg:grid-cols-3 lg:gap-x-8">
+            <div className="lg:col-span-1 lg:border-r lg:border-gray-200 lg:pr-8">
+              <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+                <img
+                  src={ ImageAssetURL + product.image}
+                  alt={product.title}
+                  className="h-full w-full object-cover object-center"
+                />
               </div>
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">ReductionTargetCarbon</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.reductionTargetCarbon}</dd>
+              <div className='mt-10'>
+                <h2 className="text-sm font-medium leading-6 text-gray-900">Description</h2>
               </div>
+              <div className="space-y-6">
+                <p className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{product?.description}</p>
+              </div>
+            </div>
 
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">ReductionAchievementCarbon</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.reductionAchievementCarbon}</dd>
-              </div>
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">BioBased Content </dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.bioBasedContent}</dd>
-                <RoundProgressBar progress={product?.impactData.bioBasedContent}/>
-              </div>
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">WasteReduction</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.wasteReduction}</dd>
-                <RoundProgressBar progress={product?.impactData.wasteReduction}/>
+            <div className="mt-10 lg:mt-0 lg:col-span-2 container">
 
-              </div>
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">TotalWaterConsumption</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.totalWaterConsumption}</dd>
-              </div>
 
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">WaterRecycled</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.waterRecycled}</dd>
-              </div>
 
-              <div  className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">ReductionAchievementWater</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.reductionAchievementWater}</dd>
-              </div>
-              <div  className="border-t border-gray-200 pt-4">
-                <div>
-              <dt className="font-medium text-gray-900">MechanicalRecyclability</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.mechanicalRecyclability}%</dd>
-                <ProgressBar progress={product?.impactData.mechanicalRecyclability} />
+              <div>
+                <div className="px-4 sm:px-0">
+                  <h3 className="text-base font-semibold leading-7 text-gray-900">Product Information</h3>
                 </div>
-                <dt className="font-medium text-gray-900">ChemicalRecyclability</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.chemicalRecyclability}%</dd>
-                <div>
-                <ProgressBar progress={product?.impactData.chemicalRecyclability} />
-                <dt className="font-medium text-gray-900">NaturalRecyclability</dt>
-                <dd className="mt-2 text-sm text-gray-500">{product?.impactData.naturalRecyclability}</dd>
-                <ProgressBar progress={product?.impactData.naturalRecyclability} />
+                <div className="mt-6 border-t border-gray-100">
+                  <dl className="divide-y divide-gray-100">
+                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                      <dt className="text-sm font-medium leading-6 text-gray-900">Carbon Impact</dt>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+
+                        <div className="grid grid-cols-3 gap-4 ">
+                          <div className="stat">
+                            <div className="stat-title text-sm text-gray-700">Total Carbon Footprint</div>
+                            <div className="stat-value text-sm text-gray-700">{product?.impactData?.totalCarbonFootprint}%</div>
+                            <div className="stat-title  text-sm text-gray-500">Total Water Consumption</div>
+                            <div className="stat-value text-sm text-gray-700">{product?.impactData?.totalWaterConsumption}%</div>
+                          </div>
+                          <div className="stat">
+                            <div className="stat-title text-sm text-gray-700">Reduction Target Carbon</div>
+                            <div className="stat-value text-sm text-gray-700">{product?.impactData?.reductionTargetCarbon}%</div>
+                            <div className="stat-title  text-sm text-gray-500">Water Recycled</div>
+                            <div className="stat-value text-sm text-gray-700">{product?.impactData?.waterRecycled}%</div>
+                          </div>
+                          <div className="stat">
+                            <div className="stat-title text-sm text-gray-700">Carbon Reduction Achievement</div>
+                            <div className="stat-value text-sm text-gray-700">{product?.impactData?.reductionAchievementCarbon}%</div>
+                            <div className="stat-title  text-sm text-gray-500">Water Reduction Achievement</div>
+                            <div className="stat-value text-sm text-gray-700">{product?.impactData?.reductionAchievementWater}%</div>
+                          </div>
+                        </div>
+
+                      </dd>
+                    </div>
+                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                      <dt className="text-sm font-medium leading-6 text-gray-900">Bio Impact</dt>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <div className="grid grid-cols-2 gap-8">
+                          <div>
+
+                            <h3 className="text-base font-semibold leading-7 text-gray-900 mb-3">Bio-Based Content</h3>
+                            <div className="radial-progress text-success" style={{ "--value": product?.impactData?.bioBasedContent }} role="progressbar">{product?.impactData?.bioBasedContent}%</div>
+
+                            <h3 className="text-base font-semibold leading-7 text-gray-900"> Waste Reduction</h3>
+                            <div className="radial-progress text-success mt-4" style={{ "--value": product?.impactData?.wasteReduction }} role="progressbar">{product?.impactData?.wasteReduction}%</div>
+                          </div>
+
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Recyclability</h3>
+                            <div className="text-gray-500">Mechanical Recyclability</div>
+                            <progress className="progress progress-success w-full" value={product?.impactData?.mechanicalRecyclability} max="100">{product?.impactData?.mechanicalRecyclability}%</progress>
+                            <div className="text-gray-500 mt-2">Chemical Recyclability</div>
+                            <progress className="progress progress-success w-full" value={product?.impactData?.chemicalRecyclability} max="100">{product?.impactData?.chemicalRecyclability}%</progress>
+                            <div className="text-gray-500 mt-2">Natural Recyclability</div>
+                            <progress className="progress progress-success w-full" value={product?.impactData?.naturalRecyclability} max="100">{product?.impactData?.naturalRecyclability}%</progress>
+                          </div>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                      <dt className="text-sm font-medium leading-6 text-gray-900">Certificates</dt>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <div className="grid grid-cols-4 gap-8">
+                          {product?.certificates.map((certificate, index) => (
+                            <img key ={index} src={getUrlByName(certificate)} className="h-100 w-full" alt="Certificate" />
+                          ))}
+                        </div>
+                      </dd>
+                    </div>
+                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                      <dt className="text-sm font-medium leading-6 text-gray-900">Attachments</dt>
+                      <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      <div className="mt-8">
+                        <div className="flex flex-wrap gap-4">
+                        {product?.attachments.map((item, index) => (
+                                              <button key={item.attachmentId} className="btn" onClick={() => window.open(ImageAssetURL+item.attachmentId, '_blank')}>
+  {item.name}
+</button>
+
+                                            ))}
+                        </div>
+                      </div>
+                          
+                      </dd>
+                    </div>
+                  </dl>
                 </div>
               </div>
 
-          </dl>
-        </div>
-        <div className="grid grid-cols-3 grid-rows-4 gap-4 sm:gap-6 lg:gap-8">
-          <img
-            src="https://dmbxlgvlkelpjnsqoubw.supabase.co/storage/v1/object/public/tocco-aasset/eco.jpg"
-            alt="Walnut card tray with white powder coated steel divider and 3 punchout holes."
-            className="rounded-lg bg-gray-100"
-          />
-          <img
-            src="https://dmbxlgvlkelpjnsqoubw.supabase.co/storage/v1/object/public/tocco-aasset/eco.jpg"
-            alt="Top down view of walnut card tray with embedded magnets and card groove."
-            className="rounded-lg bg-gray-100"
-          />
-          <img
-            src="https://dmbxlgvlkelpjnsqoubw.supabase.co/storage/v1/object/public/tocco-aasset/eco.jpg"
-            alt="Side of walnut card tray with card groove and recessed card area."
-            className="rounded-lg bg-gray-100"
-          />
-          <img
-            src="https://dmbxlgvlkelpjnsqoubw.supabase.co/storage/v1/object/public/tocco-aasset/eco.jpg"
-            alt="Walnut card tray filled with cards and card angled in dedicated groove."
-            className="rounded-lg bg-gray-100"
-          />
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   );
 };
 
 export default ProductDetail;
 
-
-interface ProgressBarProps {
-  progress: number; // progress value between 0 and 100
-}
-
-const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
-  return (
-    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-      <div
-        className="bg-blue-500 h-full"
-        style={{ width: `${progress}%` }}
-      ></div>
-    </div>
-  );
-};
-interface RoundProgressBarProps {
-  progress: number; // progress value between 0 and 100
-}
-
-
-const RoundProgressBar: React.FC<RoundProgressBarProps> = ({ progress }) => {
-  const radius = 50;
-  const strokeWidth = 10;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
-
-  return (
-    <div className="flex items-center justify-center">
-      <svg width="120" height="120" className="transform -rotate-90">
-        <circle
-          cx="60"
-          cy="60"
-          r={radius}
-          stroke="currentColor"
-          strokeWidth={strokeWidth}
-          fill="transparent"
-          className="text-gray-200"
-        />
-        <circle
-          cx="60"
-          cy="60"
-          r={radius}
-          stroke="currentColor"
-          strokeWidth={strokeWidth}
-          fill="transparent"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          className="text-blue-500"
-          style={{ transition: 'stroke-dashoffset 0.35s' }}
-        />
-      </svg>
-      <div className="absolute text-xl font-semibold text-gray-900">
-        {progress}%
-      </div>
-    </div>
-  );
-};
