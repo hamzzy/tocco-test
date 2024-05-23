@@ -8,11 +8,15 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  daisyui: {
+    themes: ["light","emerald"],
+  },
   theme: {
     extend: {},
 
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('daisyui'),
   ],
 }

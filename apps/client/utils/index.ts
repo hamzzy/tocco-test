@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 interface Certificate {
     name: string;
     url: string;
@@ -61,3 +62,49 @@ export const availableCertificates =[
     { value: "Good Weave", label: "Good Weave"}
 
   ]
+
+
+  export const validationSchema = Yup.object({
+    title: Yup.string().required('Required'),
+    description: Yup.string().required('Required'),
+    impactData: Yup.object({
+        totalCarbonFootprint: Yup.number()
+        .min(0, 'Total carbon footprint must be at least 0')
+        .max(100, 'Total carbon footprint must be at most 100')
+        .required('Total carbon footprint is required'),
+      reductionTargetCarbon: Yup.number()
+        .min(0, 'Reduction target carbon must be at least 0')
+        .max(100, 'Reduction target carbon must be at most 100')
+        .required('Reduction target carbon is required'),
+      bioBasedContent: Yup.number()
+        .min(0, 'Bio-based content must be at least 0')
+        .max(100, 'Bio-based content must be at most 100')
+        .required('Bio-based content is required'),
+      wasteReduction: Yup.number()
+        .min(0, 'Waste reduction must be at least 0')
+        .max(100, 'Waste reduction must be at most 100')
+        .required('Waste reduction is required'),
+      waterRecycled: Yup.number()
+        .min(0, 'Water recycled must be at least 0')
+        .max(100, 'Water recycled must be at most 100')
+        .required('Water recycled is required'),
+      mechanicalRecyclability: Yup.number()
+        .min(0, 'Mechanical recyclability must be at least 0')
+        .max(100, 'Mechanical recyclability must be at most 100')
+        .required('Mechanical recyclability is required'),
+      chemicalRecyclability: Yup.number()
+        .min(0, 'Chemical recyclability must be at least 0')
+        .max(100, 'Chemical recyclability must be at most 100')
+        .required('Chemical recyclability is required'),
+      naturalRecyclability: Yup.number()
+        .min(0, 'Natural recyclability must be at least 0')
+        .max(100, 'Natural recyclability must be at most 100')
+        .required('Natural recyclability is required'),
+      totalWaterConsumption: Yup.number()
+        .min(0, 'Total water consumption must be at least 0')
+        .max(100, 'Total water consumption must be at most 100')
+        .required('Total water consumption is required'),
+    }),
+    certificates: Yup.array().min(1, 'At least one certificate is required').required('Required'),
+  });
+  

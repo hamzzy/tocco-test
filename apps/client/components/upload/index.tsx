@@ -10,16 +10,17 @@ interface UppyDashboardProps {
   name: string;
   setField: FormikProps<any>['setFieldValue'];
   fileNo: number;
+  attachmentType: string | null;
 }
 
-const UppyDashboard: React.FC<UppyDashboardProps> = ({ id, name,fileNo,setField }) => {
+const UppyDashboard: React.FC<UppyDashboardProps> = ({ id, name, fileNo, setField, attachmentType }) => {
 
-  const { uppy, uploadedFiles } = useUppy(id,fileNo); // Call the useUppy hook with the provided ID
+  const { uppy, uploadedFiles } = useUppy(id, fileNo); // Call the useUppy hook with the provided ID
   useEffect(() => {
     if (uploadedFiles.length > 0) {
       const fieldData = uploadedFiles.map((filePath) =>
         name === "attachments"
-          ? { name: filePath, attachmentId: filePath }
+          ? { name: attachmentType, attachmentId: filePath }
           : filePath
       );
       setField.setFieldValue(name, fieldData, true);
@@ -27,7 +28,7 @@ const UppyDashboard: React.FC<UppyDashboardProps> = ({ id, name,fileNo,setField 
   }, [uploadedFiles, name]);
   return (
     <>
-      {uppy && <Dashboard uppy={uppy} id={`uppy-dashboard-${id}`}  height={200} />}
+      {uppy && <Dashboard uppy={uppy} id={`uppy-dashboard-${id}`} height={200} />}
     </>
   );
 };
