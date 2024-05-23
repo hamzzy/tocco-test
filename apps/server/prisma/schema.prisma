@@ -17,11 +17,11 @@ datasource db {
 
 model Product {
   id           Int                @id @default(autoincrement())
-  name         String
+  title         String @default("")
   description  String
-  launchDate   DateTime
+  image        String  @default("")
   impactData   ProductImpactData?
-  certificates Certificate[]
+  certificates String []  @default([])
   attachments  Attachment[]
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
@@ -46,14 +46,6 @@ model ProductImpactData {
   updatedAt                  DateTime @updatedAt
 }
 
-model Certificate {
-  id              Int      @id @default(autoincrement())
-  product         Product  @relation(fields: [productId], references: [id])
-  productId       Int
-  certificateId String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
 
 model Attachment {
   id             Int      @id @default(autoincrement())

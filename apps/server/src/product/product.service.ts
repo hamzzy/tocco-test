@@ -3,7 +3,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
+import { CreateProductDto, CreateProductImpactDataDto, UpdateProductDto } from './dto/create-product.dto';
 import { PrismaService } from '../common/prisma/prisma.service';
 
 @Injectable()
@@ -11,75 +11,57 @@ export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   // create a new product
+  
   async create(createProductDto: CreateProductDto) {
     try {
       return await this.prisma.$transaction(async (prisma) => {
-        const {
-          name,
-          description,
-          launchDate,
-          impactData,
-          certificates,
-          attachments,
-        } = createProductDto;
-
+        const { title, description, image, impactData, certificates, attachments } = createProductDto;
+  
+        console.log('Received data:', createProductDto);  // Log the received data
+  
         const product = await prisma.product.create({
-          data: { name, description, launchDate },
+          data: {
+            title,
+            description,
+            image,
+            certificates: certificates || [],
+          },
         });
-
+  
         const productId = product.id;
-
+  
         if (impactData) {
-          const impactDataWithComputedFields = impactData.map((impact) => ({
-            ...impact,
-            reductionAchievementCarbon:
-              impact.reductionTargetCarbon - impact.totalCarbonFootprint,
-            reductionAchievementWater:
-              impact.waterRecycled - impact.totalWaterConsumption, // Assuming a target water consumption of 500
-          }));
-
-          await Promise.all(
-            impactDataWithComputedFields.map((impact) =>
-              prisma.productImpactData.create({
-                data: { ...impact, productId },
-              }),
-            ),
-          );
+          const impactDataWithComputedFields: CreateProductImpactDataDto = {
+            ...impactData,
+            reductionAchievementCarbon: impactData.reductionTargetCarbon - impactData.totalCarbonFootprint,
+            reductionAchievementWater: impactData.waterRecycled - impactData.totalWaterConsumption,
+          };
+  
+  
+          await prisma.productImpactData.create({ data: { ...impactDataWithComputedFields, productId } });
         }
-
-        if (certificates) {
-          await Promise.all(
-            certificates.map((certificate) =>
-              prisma.certificate.create({
-                data: { ...certificate, productId },
-              }),
-            ),
-          );
-        }
-
+  
         if (attachments) {
-          await Promise.all(
-            attachments.map((attachment) =>
-              prisma.attachment.create({
-                data: { ...attachment, productId },
-              }),
-            ),
-          );
+          await prisma.attachment.createMany({
+            data: attachments.map((attachment) => ({ ...attachment, productId })),
+          });
         }
-
+  
         return product;
       });
     } catch (error) {
+      console.error('Error creating product:', error);  // Log the error
       throw new InternalServerErrorException('Failed to create product');
     }
   }
+  
+
 
   async findAll() {
     try {
       return await this.prisma.product.findMany({
         include: {
           impactData: true,
-          certificates: true,
           attachments: true,
         },
       });
@@ -93,7 +75,6 @@ export class ProductService {
       where: { id },
       include: {
         impactData: true,
-        certificates: true,
         attachments: true,
       },
     });
@@ -109,9 +90,9 @@ export class ProductService {
     try {
       return await this.prisma.$transaction(async (prisma) => {
         const {
-          name,
+          title ,
           description,
-          launchDate,
+          image,
           impactData,
           certificates,
           attachments,
@@ -119,31 +100,26 @@ export class ProductService {
 
         const product = await prisma.product.update({
           where: { id },
-          data: { name, description, launchDate },
+          data: { 
+            title , 
+            description, 
+            image,
+            certificates: certificates || [],
+          },
         });
 
         if (impactData) {
           await prisma.productImpactData.deleteMany({
             where: { productId: id },
           });
-          await Promise.all(
-            impactData.map((impact) =>
-              prisma.productImpactData.create({
-                data: { ...impact, productId: id },
-              }),
-            ),
-          );
-        }
-
-        if (certificates) {
-          await prisma.certificate.deleteMany({ where: { productId: id } });
-          await Promise.all(
-            certificates.map((certificate) =>
-              prisma.certificate.create({
-                data: { ...certificate, productId: id },
-              }),
-            ),
-          );
+          const impactDataWithComputedFields = {
+            ...impactData,
+            reductionAchievementCarbon: impactData.reductionTargetCarbon - impactData.totalCarbonFootprint,
+            reductionAchievementWater: impactData.waterRecycled - impactData.totalWaterConsumption,
+          };
+          await prisma.productImpactData.create({
+            data: { ...impactDataWithComputedFields, productId: id },
+          });
         }
 
         if (attachments) {
@@ -168,7 +144,6 @@ export class ProductService {
     try {
       return await this.prisma.$transaction(async (prisma) => {
         await prisma.productImpactData.deleteMany({ where: { productId: id } });
-        await prisma.certificate.deleteMany({ where: { productId: id } });
         await prisma.attachment.deleteMany({ where: { productId: id } });
 
         return await prisma.product.delete({ where: { id } });

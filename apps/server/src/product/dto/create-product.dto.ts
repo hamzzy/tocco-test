@@ -1,27 +1,4 @@
-import { IsArray, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
-
-export class CreateProductDto {
-  @IsString()
-  name: string;
-
-  @IsString()
-  description: string;
-
-  @IsDateString()
-  launchDate: string;
-
-  @IsOptional()
-  @IsArray()
-  impactData?: CreateProductImpactDataDto[];
-
-  @IsOptional()
-  @IsArray()
-  certificates?: CreateCertificateDto[];
-
-  @IsOptional()
-  @IsArray()
-  attachments?: CreateAttachmentDto[];
-}
+import { IsArray, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductImpactDataDto {
   @IsNumber()
@@ -58,14 +35,33 @@ export class CreateProductImpactDataDto {
   naturalRecyclability: number;
 }
 
-export class CreateCertificateDto {
+export class CreateProductDto {
   @IsString()
-  certificateId: string;
+  title : string;
+
+  @IsString()
+  description: string;
+
+  @IsString()
+  image: string;
+
+  @IsOptional()
+  @IsObject()
+  impactData?: CreateProductImpactDataDto;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  certificates?: string[];
+
+  @IsOptional()
+  @IsArray()
+  attachments?: CreateAttachmentDto[];
 }
 
 export class CreateAttachmentDto {
   @IsString()
-  name: string;
+  name : string;
 
   @IsString()
   attachmentId: string;
@@ -74,23 +70,23 @@ export class CreateAttachmentDto {
 export class UpdateProductDto {
   @IsOptional()
   @IsString()
-  name?: string;
+  title ?: string;
 
   @IsOptional()
   @IsString()
   description?: string;
 
   @IsOptional()
-  @IsDateString()
-  launchDate?: string;
+  @IsString()
+  image?: string;
+
+  @IsOptional()
+  impactData?: CreateProductImpactDataDto;
 
   @IsOptional()
   @IsArray()
-  impactData?: CreateProductImpactDataDto[];
-
-  @IsOptional()
-  @IsArray()
-  certificates?: CreateCertificateDto[];
+  @IsString({ each: true })
+  certificates?: string[];
 
   @IsOptional()
   @IsArray()

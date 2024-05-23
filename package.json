@@ -4,6 +4,7 @@
     "apps/*"
   ],
   "devDependencies": {
+    "daisyui": "^4.11.1",
     "eslint": "^9.3.0",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
@@ -52,8 +53,10 @@
     "formik": "^2.4.6",
     "framer-motion": "^11.2.4",
     "lint-staged": "^15.2.2",
+    "postcss": "^8.4.38",
     "prisma": "^5.14.0",
     "react-hot-toast": "^2.4.1",
+    "react-tailwindcss-select": "^1.8.5",
     "uuid": "^9.0.1",
     "yarn": "^1.22.22",
     "yup": "^1.4.0"
