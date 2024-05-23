@@ -4,7 +4,7 @@
 
 ## Overview
 
-This web application allows users to input and manage product impact data. It's designed to be used by administrators of Tocco's platform to ensure accurate and comprehensive data collection for each product. Users can enter details such as product information, environmental impact metrics, certifications, and attachments.
+This web application allows users to input and manage product impact data. Users can enter details such as product information, environmental impact metrics, certifications, and attachments.
 
 ## Features
 
