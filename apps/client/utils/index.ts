@@ -48,3 +48,16 @@ export function getUrlByName(name: string): string | null {
 }
 
 
+export const availableCertificates =[
+    { value: "Better Cotton", label: "Better Cotton" },
+    { value: "Bluesign", label: "Bluesign" },
+    { value: "Cradle To Cradle", label: "Cradle To Cradle" },
+    { value: "Fair Trade", label: "Fair Trade" },
+    { value: "Global Organic Textile Standard", label: "Global Organic Textile Standard" },
+    { value: "Textile Exchange", label: "Textile Exchange" },
+    { value: "Oeko-Tex", label: "Oeko-Tex" },
+    { value: "Zque", label: "Zque" },
+    { value: "Textile Exchange", label: "Textile Exchange" },
+    { value: "Good Weave", label: "Good Weave"}
+
+  ]

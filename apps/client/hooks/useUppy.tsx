@@ -3,7 +3,7 @@ import Uppy from '@uppy/core';
 import Tus from '@uppy/tus';
 import { v4 as uuidv4 } from 'uuid';
 
-const useUppy = (id: string) => {
+const useUppy = (id: string,fileNo: number) => {
   const [uppy, setUppy] = useState<Uppy | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
 
@@ -12,6 +12,7 @@ const useUppy = (id: string) => {
       allowMultipleUploads: true,
       id: `uppy-dashboard-${id}`,
       restrictions: {
+        maxNumberOfFiles: fileNo,
         maxFileSize: 100000000,
         allowedFileTypes: ['images/*', '.jpeg', '.jpg',".webp", '.png',".pdf",".txt",".docx"],
       },
@@ -30,7 +31,6 @@ const useUppy = (id: string) => {
           ...file.meta,
           bucketName: "tocco-aasset",
           objectName: uuidv4(),
-          contentType: file.type,
         };
       }).on('complete', (result) => {
         console.log(result.successful[0])

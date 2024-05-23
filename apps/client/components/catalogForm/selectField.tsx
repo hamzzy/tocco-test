@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-tailwindcss-select';
-
+import 'react-tailwindcss-select/dist/index.css'
 interface SelectFieldProps {
   name: string;
   value: any;
