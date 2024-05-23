@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next';
 import { useQuery } from '@tanstack/react-query';
 import { Product } from '@/utils/type';
 import { getUrlByName } from '@/utils';
-import { Tabs } from 'daisyui';
 import { ImageAssetURL } from '@/utils/constat';
 
 
@@ -55,7 +54,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
             <div className="lg:col-span-1 lg:border-r lg:border-gray-200 lg:pr-8">
               <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
                 <img
-                  src={ ImageAssetURL + product.image}
+                  src={ImageAssetURL + product.image}
                   alt={product.title}
                   className="h-full w-full object-cover object-center"
                 />
@@ -136,7 +135,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                         <div className="grid grid-cols-4 gap-8">
                           {product?.certificates.map((certificate, index) => (
-                            <img key ={index} src={getUrlByName(certificate)} className="h-100 w-full" alt="Certificate" />
+                            <img key={index} src={getUrlByName(certificate)} className="h-100 w-full" alt="Certificate" />
                           ))}
                         </div>
                       </dd>
@@ -144,17 +143,17 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                       <dt className="text-sm font-medium leading-6 text-gray-900">Attachments</dt>
                       <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <div className="mt-8">
-                        <div className="flex flex-wrap gap-4">
-                        {product?.attachments.map((item, index) => (
-                                              <button key={item.attachmentId} className="btn" onClick={() => window.open(ImageAssetURL+item.attachmentId, '_blank')}>
-  {item.name}
-</button>
+                        <div className="mt-8">
+                          <div className="flex flex-wrap gap-4">
+                            {product?.attachments.map((item, index) => (
+                              <button key={item.attachmentId} className="btn" onClick={() => window.open(ImageAssetURL + item.attachmentId, '_blank')}>
+                                {item.name}
+                              </button>
 
-                                            ))}
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                          
+
                       </dd>
                     </div>
                   </dl>
