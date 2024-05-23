@@ -1,6 +1,4 @@
-Here's a sample README file for your project:
 
----
 
 # Tocco Product Impact Data Management
 
